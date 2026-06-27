@@ -1,0 +1,87 @@
+Hello, DevOps Batch 13! 👋
+
+================================================================
+        WHAT IS DEVOPS?  —  A Quick Introduction
+================================================================
+
+DevOps is a combination of two words: "Development" + "Operations".
+It is a culture, set of practices, and collection of tools that bring
+development (writing software) and IT operations (running software)
+closer together so teams can deliver applications faster and more
+reliably.
+
+----------------------------------------------------------------
+THE DEVOPS LIFECYCLE (The "Infinity" Loop ♾️)
+----------------------------------------------------------------
+  1. Plan         – Define features, track issues
+  2. Code         – Write and review source code
+  3. Build        – Compile and package the application
+  4. Test         – Run automated and manual tests
+  5. Release      – Manage versions and readiness
+  6. Deploy       – Ship to staging / production
+  7. Operate      – Run, scale, and maintain infrastructure
+  8. Monitor      – Observe performance, logs, and feedback
+
+...and the loop repeats — that is "Continuous Everything".
+
+----------------------------------------------------------------
+CORE PRACTICES
+----------------------------------------------------------------
+  • Continuous Integration (CI)
+      Developers merge code frequently; every merge is built and
+      tested automatically.
+
+  • Continuous Delivery / Deployment (CD)
+      Every change that passes tests is automatically ready (or
+      shipped) to production.
+
+  • Infrastructure as Code (IaC)
+      Servers and infrastructure are defined in code (e.g., Terraform,
+      Ansible) so they are repeatable and version-controlled.
+
+  • Microservices
+      Building software as small, independent services.
+
+  • Monitoring & Logging
+      Constant visibility into system health and performance.
+
+  • Collaboration & Communication
+      Breaking down silos between Dev and Ops teams.
+
+----------------------------------------------------------------
+POPULAR DEVOPS TOOLS
+----------------------------------------------------------------
+  Version Control      : Git, GitHub, GitLab
+  CI/CD                : Jenkins, GitHub Actions, GitLab CI, CircleCI
+  Containers           : Docker, Podman
+  Orchestration        : Kubernetes, Docker Swarm
+  IaC                  : Terraform, Ansible, Chef, Puppet
+  Monitoring           : Prometheus, Grafana, ELK Stack, Datadog
+  Cloud Platforms      : AWS, Azure, Google Cloud (GCP)
+
+----------------------------------------------------------------
+KEY BENEFITS
+----------------------------------------------------------------
+  ✅ Faster delivery of features and fixes
+  ✅ Higher quality and fewer failures
+  ✅ Quick recovery when things break
+  ✅ Better collaboration and happier teams
+  ✅ Stable, scalable, and secure operating environments
+
+----------------------------------------------------------------
+CALMS — The Cultural Framework
+----------------------------------------------------------------
+  C – Culture       (shared responsibility, trust)
+  A – Automation    (remove manual, repetitive work)
+  L – Lean          (eliminate waste, focus on value)
+  M – Measurement   (data-driven decisions)
+  S – Sharing       (knowledge, feedback, and tools)
+
+================================================================
+"DevOps is not a goal, but a never-ending journey of improvement."
+================================================================
+
+This file (hello.txt) is part of the Module 1 assignment and
+demonstrates the branching workflow on the 'dev' branch.
+
+— DevOps Batch 13, Module 1
