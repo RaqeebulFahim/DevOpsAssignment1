@@ -1,0 +1,288 @@
+================================================================================
+                         GIT PULL - COMPLETE GUIDE
+            From Beginner to Advanced to Production-Level Usage
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. WHAT IS GIT PULL?
+--------------------------------------------------------------------------------
+
+`git pull` is a Git command used to FETCH changes from a remote repository and
+INTEGRATE (merge) them into your current local branch.
+
+In simple terms:
+    git pull = git fetch + git merge
+
+    - git fetch  -> Downloads new commits/branches/tags from the remote,
+                    but does NOT change your working files.
+    - git merge  -> Integrates those downloaded changes into your current
+                    branch.
+
+So `git pull` does both steps in one command: it brings remote changes and
+applies them to your local branch automatically.
+
+
+--------------------------------------------------------------------------------
+2. BASIC SYNTAX
+--------------------------------------------------------------------------------
+
+    git pull <remote> <branch>
+
+Examples:
+    git pull                  # Pull from the tracked remote/branch
+    git pull origin main      # Pull 'main' branch from remote named 'origin'
+    git pull origin dev       # Pull 'dev' branch from 'origin'
+
+Terms:
+    - remote : A named reference to a remote repo (usually "origin").
+    - branch : The branch you want to pull from (e.g. main, dev, master).
+
+
+--------------------------------------------------------------------------------
+3. BEGINNER LEVEL - GETTING STARTED
+--------------------------------------------------------------------------------
+
+3.1 Check your current branch and status first:
+    git status
+    git branch
+
+3.2 Simple pull (most common daily use):
+    git pull origin main
+
+3.3 What happens when you run git pull:
+    1) Git contacts the remote repository.
+    2) Downloads any new commits that you don't have.
+    3) Merges them into your current local branch.
+    4) Updates your working directory files.
+
+3.4 A typical first-time workflow:
+    git clone https://github.com/user/repo.git   # Clone a repo
+    cd repo
+    git pull origin main                          # Get latest changes
+
+
+--------------------------------------------------------------------------------
+4. UNDERSTANDING FETCH vs PULL
+--------------------------------------------------------------------------------
+
+FETCH (safe - no changes to your files):
+    git fetch origin
+    git log origin/main          # Inspect what changed
+    git diff main origin/main    # Compare before merging
+    git merge origin/main        # Merge manually when ready
+
+PULL (fetch + merge in one step):
+    git pull origin main
+
+TIP: Many professionals prefer `git fetch` then `git merge`/`git rebase`
+because it gives them a chance to REVIEW changes before integrating.
+
+
+--------------------------------------------------------------------------------
+5. INTERMEDIATE LEVEL - PULL STRATEGIES
+--------------------------------------------------------------------------------
+
+5.1 Pull with MERGE (default behaviour):
+    git pull origin main
+    # Creates a merge commit if histories have diverged.
+
+5.2 Pull with REBASE (cleaner, linear history):
+    git pull --rebase origin main
+    # Replays your local commits on top of remote changes.
+    # Avoids unnecessary merge commits -> cleaner history.
+
+5.3 Fast-forward only (fail if a merge is needed):
+    git pull --ff-only origin main
+    # Only updates if it can move the pointer forward without merging.
+    # Great for keeping history clean and avoiding accidental merges.
+
+5.4 Pull a specific branch into another:
+    git pull origin feature-branch
+
+5.5 Pull all branches info (with prune to remove deleted remote branches):
+    git pull --prune
+
+
+--------------------------------------------------------------------------------
+6. CONFIGURING PULL BEHAVIOUR (RECOMMENDED)
+--------------------------------------------------------------------------------
+
+Set a default pull strategy so you don't type flags each time.
+
+6.1 Default to merge:
+    git config --global pull.rebase false
+
+6.2 Default to rebase (popular in teams for clean history):
+    git config --global pull.rebase true
+
+6.3 Default to fast-forward only:
+    git config --global pull.ff only
+
+6.4 Set upstream tracking so you can just type `git pull`:
+    git branch --set-upstream-to=origin/main main
+    # or when pushing the first time:
+    git push -u origin main
+
+
+--------------------------------------------------------------------------------
+7. HANDLING MERGE CONFLICTS
+--------------------------------------------------------------------------------
+
+Conflicts happen when the same lines were changed both remotely and locally.
+
+7.1 When a pull causes a conflict, Git pauses and marks the files:
+    git status                       # See conflicted files
+
+7.2 Conflict markers inside files look like:
+    <<<<<<< HEAD
+    your local changes
+    =======
+    incoming remote changes
+    >>>>>>> origin/main
+
+7.3 Resolve manually by editing the file, then:
+    git add <resolved-file>
+    git commit                       # If you were merging
+    # OR, if rebasing:
+    git rebase --continue
+
+7.4 Abort and go back to the previous state if needed:
+    git merge --abort
+    git rebase --abort
+
+
+--------------------------------------------------------------------------------
+8. ADVANCED LEVEL - POWER USAGE
+--------------------------------------------------------------------------------
+
+8.1 Stash local changes before pulling (avoid "uncommitted changes" errors):
+    git stash
+    git pull origin main
+    git stash pop
+
+8.2 Pull and autostash automatically:
+    git pull --rebase --autostash origin main
+
+8.3 Pull a single commit / shallow update:
+    git pull --depth=1 origin main   # Useful for large repos / CI
+
+8.4 Pull tags along with commits:
+    git pull --tags origin main
+
+8.5 Force-sync local branch to match remote EXACTLY (DESTRUCTIVE):
+    git fetch origin
+    git reset --hard origin/main     # Discards local changes! Be careful.
+
+8.6 Pull from a different remote:
+    git remote add upstream https://github.com/original/repo.git
+    git pull upstream main           # Sync a fork with the original repo
+
+8.7 Verify what will change before pulling:
+    git fetch origin
+    git log HEAD..origin/main --oneline    # Incoming commits
+    git diff HEAD..origin/main             # Incoming changes
+
+
+--------------------------------------------------------------------------------
+9. PRODUCTION-LEVEL BEST PRACTICES
+--------------------------------------------------------------------------------
+
+9.1 PREFER fetch + review + merge in production:
+    Never blindly pull into a production branch. Always inspect first.
+        git fetch origin
+        git diff main origin/main
+        git merge --ff-only origin/main
+
+9.2 USE rebase for feature branches, MERGE for shared/release branches:
+    - Feature branches: git pull --rebase (clean linear history)
+    - Shared/main branches: git pull (preserve merge history)
+
+9.3 PROTECT production branches:
+    - Enable branch protection rules on GitHub/GitLab.
+    - Require Pull Requests + code review before merging.
+    - Disallow direct pushes/pulls into main/production.
+
+9.4 NEVER use `git reset --hard` on a shared production branch
+    unless you fully understand the consequences. It rewrites history
+    and can destroy other people's work.
+
+9.5 PULL BEFORE YOU PUSH (avoid rejected pushes):
+    git pull --rebase origin main
+    git push origin main
+
+9.6 IN CI/CD PIPELINES:
+    - Use shallow clones/pulls for speed:  git pull --depth=1
+    - Pin to specific commits or tags for reproducible builds.
+    - Use read-only deploy keys / tokens for pulling code.
+
+9.7 AUTOMATED DEPLOYMENTS (e.g. on a server):
+    cd /var/www/myapp
+    git fetch origin
+    git reset --hard origin/main     # Controlled, scripted deploy only
+    # Followed by build/restart steps.
+    # This is acceptable on a deploy server where local = throwaway.
+
+9.8 ALWAYS know which branch you are on before pulling:
+    git branch --show-current
+
+9.9 KEEP a clean working tree:
+    Commit or stash work before pulling to avoid surprises.
+
+
+--------------------------------------------------------------------------------
+10. COMMON ERRORS & FIXES
+--------------------------------------------------------------------------------
+
+ERROR: "Your local changes would be overwritten by merge"
+    FIX:  git stash    ->  git pull    ->  git stash pop
+          OR commit your changes first.
+
+ERROR: "fatal: refusing to merge unrelated histories"
+    FIX:  git pull origin main --allow-unrelated-histories
+
+ERROR: "There is no tracking information for the current branch"
+    FIX:  git branch --set-upstream-to=origin/main
+          OR  git pull origin main
+
+ERROR: Merge conflicts after pull
+    FIX:  Resolve conflicts -> git add -> git commit (or --continue)
+
+ERROR: Push rejected (remote has changes you don't have)
+    FIX:  git pull --rebase origin main  ->  git push origin main
+
+
+--------------------------------------------------------------------------------
+11. QUICK REFERENCE CHEAT SHEET
+--------------------------------------------------------------------------------
+
+    git pull                          # Pull tracked branch
+    git pull origin main              # Pull specific branch
+    git pull --rebase origin main     # Pull with rebase
+    git pull --ff-only origin main    # Fast-forward only
+    git pull --autostash --rebase     # Auto-stash + rebase
+    git pull --prune                  # Remove deleted remote branches
+    git pull --tags                   # Include tags
+    git pull upstream main            # Pull from another remote (fork sync)
+    git fetch + git merge             # Safer manual alternative
+
+    Config:
+    git config --global pull.rebase true
+    git config --global pull.ff only
+
+
+--------------------------------------------------------------------------------
+12. GOLDEN RULES
+--------------------------------------------------------------------------------
+
+    1. Always know your current branch before pulling.
+    2. Commit or stash your work before pulling.
+    3. Pull frequently to stay in sync and avoid big conflicts.
+    4. In production, fetch & review BEFORE you merge.
+    5. Use --rebase for feature branches to keep history clean.
+    6. Protect main/production branches with PRs and reviews.
+    7. Never rewrite shared history carelessly.
+
+================================================================================
+                              END OF GUIDE
+================================================================================
