@@ -88,8 +88,41 @@ info "Step 3: Creating and switching to 'dev' branch..."
 git checkout -q -b dev
 ok "Now on branch 'dev'"
 
-info "Step 3: Creating hello.txt..."
-echo "Hello from the dev branch! 👋" > hello.txt
+info "Step 3: Creating hello.txt (informative DevOps content)..."
+cat > hello.txt << 'EOF'
+Hello, DevOps Batch 13! 👋
+
+WHAT IS DEVOPS?
+DevOps = Development + Operations. It is a culture, set of practices,
+and collection of tools that bring dev and ops closer together so
+teams can deliver software faster and more reliably.
+
+DEVOPS LIFECYCLE (Infinity Loop ♾️):
+  Plan → Code → Build → Test → Release → Deploy → Operate → Monitor → ...
+
+CORE PRACTICES:
+  • Continuous Integration (CI)
+  • Continuous Delivery / Deployment (CD)
+  • Infrastructure as Code (IaC)
+  • Microservices
+  • Monitoring & Logging
+  • Collaboration & Communication
+
+POPULAR TOOLS:
+  Version Control: Git, GitHub, GitLab
+  CI/CD          : Jenkins, GitHub Actions, GitLab CI
+  Containers     : Docker, Podman
+  Orchestration  : Kubernetes
+  IaC            : Terraform, Ansible
+  Monitoring     : Prometheus, Grafana, ELK Stack
+
+CALMS Framework:
+  Culture, Automation, Lean, Measurement, Sharing
+
+"DevOps is not a goal, but a never-ending journey of improvement."
+
+— DevOps Batch 13, Module 1 (created on the 'dev' branch)
+EOF
 ok "hello.txt created"
 
 info "Step 3: Staging + committing hello.txt..."
